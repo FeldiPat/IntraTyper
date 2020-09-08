@@ -13,4 +13,4 @@ data/valid.txt
 node_modules/
 .DS_Store
 data/.DS_Store
-package_lock.json
+package-lock.json
