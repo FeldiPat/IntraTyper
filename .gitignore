@@ -1,0 +1,13 @@
+data/Repos/
+data/Repos-cleaned/
+data/outputs-all/
+data/outputs-gold/
+data/outputs-checkjs/
+data/biggest10.txt
+data/source_wl
+data/target_wl
+data/test.txt
+data/train.txt
+data/valid.txt
+.idea/
+node_modules/
