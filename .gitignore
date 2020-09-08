@@ -11,3 +11,6 @@ data/train.txt
 data/valid.txt
 .idea/
 node_modules/
+.DS_Store
+data/.DS_Store
+package_lock.json
