@@ -19,11 +19,11 @@ keywords = ["async", "await", "break", "continue", "class", "extends", "construc
             "namespace", "require", "from", "of", "package"]
 
 files = {
-    'train': {'file': 'data/train.ctf', 'location': 0},
-    'valid': {'file': 'data/valid.ctf', 'location': 0},
-    'test': {'file': 'data/test.ctf', 'location': 0},
-    'source': {'file': 'data/source_wl', 'location': 1},
-    'target': {'file': 'data/target_wl', 'location': 1}
+    'train': {'file': 'data/intra_train.ctf', 'location': 0},
+    'valid': {'file': 'data/intra_valid.ctf', 'location': 0},
+    'test': {'file': 'data/intra_test.ctf', 'location': 0},
+    'source': {'file': 'data/intra_source_wl', 'location': 1},
+    'target': {'file': 'data/intra_target_wl', 'location': 1}
 }
 
 # load dictionaries
@@ -35,12 +35,13 @@ target_dict = {target_wl[i]: i for i in range(len(target_wl))}
 # number of words in vocab, slot labels, and intent labels
 vocab_size = len(source_dict)
 num_labels = len(target_dict)
-epoch_size = 340771
+epoch_size = 197271
 minibatch_size = 3500
-emb_dim = 150
-hidden_dim = 300
+emb_dim = 300
+hidden_dim = 650
 num_epochs = 10
-training_log_file = "training_logs/GRU-3500-300-650-google"  # layer- minibatch_size - emb_dim - hidden_dim - project
+# setting-layer-minibatch_size-emb_dim-hidden_dim-project
+training_log_file = "training_logs/intra-GRU-3500-300-650-google"
 
 # Create Training log directory
 if not os.path.isdir("training_logs"):
@@ -188,7 +189,7 @@ def train():
             pp.update_with_trainer(trainer, with_metric=True)
             step += data[y].num_samples
         pp.epoch_summary(with_metric=True)
-        trainer.save_checkpoint("models/GRU-3500-300-650-google" + str(epoch + 1) + ".cntk")
+        trainer.save_checkpoint("models/intra-GRU-3500-300-650-google" + str(epoch + 1) + ".cntk")
         validate()
         print("Epoch: " + str(epoch + 1))
         evaluate()
