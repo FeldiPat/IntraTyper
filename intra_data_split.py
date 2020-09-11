@@ -1,17 +1,17 @@
 import os
 import random
 
-random.seed(40)
+# random.seed(444)
 
 data_dir = "data/"
 in_dir = data_dir + "outputs-all/"
-min_source_vocab = 5  # cut off source vocabulary at 10 token occurrences
-min_target_vocab = 5  # cut off target vocabulary at 10 token occurrences
-minibatchMaxSize = 5000  # cut off files with less than x characters
+min_source_vocab = 3  # cut off source vocabulary at 10 token occurrences
+min_target_vocab = 3  # cut off target vocabulary at 10 token occurrences
+minibatchMaxSize = 3500  # cut off files with less than x characters
 include_JS = False
 
-big10 = []
 file_count = 0
+big10 = []
 for project in os.listdir(in_dir):
     if "DefinitelyTyped" in project:
         continue
@@ -74,8 +74,8 @@ test_targets = []
 with open(data_dir + "biggest10.txt", "r") as f:
     biggest = f.readlines()[-1].split("__")[0]
 
+# collect all source code lines of the biggest project family (here: google_xyz)
 content = []
-# collect all source code lines of one project family (here: Microsoft__xyz)
 for project in os.listdir(in_dir):
     if "DefinitelyTyped" in project:
         continue
@@ -86,7 +86,6 @@ for project in os.listdir(in_dir):
     with open(in_dir + "/" + project, "r", encoding="utf-8") as f:
         content = content + [line.strip() for line in f]  # each line corresponds to one sourcefile
 
-minibatchCount = 0
 for ix, line in enumerate(content):  # iterate over each sourcode-line in the project
     if len(line) == 0:
         continue
@@ -102,7 +101,6 @@ for ix, line in enumerate(content):  # iterate over each sourcode-line in the pr
         print("%d, %d" % (len(source_tokens), len(target_tokens)))
         break
     if len(source_tokens) > minibatchMaxSize:
-        minibatchCount += 1
         continue
     # split source files into training/validation/test
     if ix in train_indices:
@@ -112,10 +110,12 @@ for ix, line in enumerate(content):  # iterate over each sourcode-line in the pr
         valid_sources.append(source_tokens)
         valid_targets.append(target_tokens)
     elif ix in test_indices:
+        with open("data/intra_test_code.txt", 'a+') as t_code:
+            t_code.write(" ".join(source_tokens))
+            t_code.write("\n")
         test_sources.append(source_tokens)
         test_targets.append(target_tokens)
 
-print("Exceeded MinibatchSize: " + str(minibatchCount) + " times")
 print("Train files: %d" % len(train_sources))
 print("Validation files: %d" % len(valid_sources))
 print("Test files: %d" % len(test_sources))
@@ -159,12 +159,12 @@ for ix, (_, count) in enumerate(target_words):
 target_words = target_words[:target_cutoff]
 target_word_vocab = set([word for word, _ in target_words])
 
-with open(data_dir + "source_wl", "w", encoding="utf-8") as out:
+with open(data_dir + "intra_source_wl", "w", encoding="utf-8") as out:
     for name, count in source_words:
         out.write(name)
         out.write("\n")
 
-with open(data_dir + "target_wl", "w", encoding="utf-8") as out:
+with open(data_dir + "intra_target_wl", "w", encoding="utf-8") as out:
     for name, count in target_words:
         out.write(name)
         out.write("\n")
@@ -195,9 +195,9 @@ def write(wfile, sources, targets):
     return token_count
 
 
-train_file = data_dir + "train.txt"
-valid_file = data_dir + "valid.txt"
-test_file = data_dir + "test.txt"
+train_file = data_dir + "intra_train.txt"
+valid_file = data_dir + "intra_valid.txt"
+test_file = data_dir + "intra_test.txt"
 train_tokens = write(train_file, train_sources, train_targets)
 valid_tokens = write(valid_file, valid_sources, valid_targets)
 test_tokens = write(test_file, test_sources, test_targets)

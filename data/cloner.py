@@ -1,4 +1,5 @@
 import os
+
 import git
 
 data = 'repo-SHAs.txt'

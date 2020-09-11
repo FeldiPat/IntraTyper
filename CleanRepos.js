@@ -23,13 +23,13 @@ var templateKinds = [
     ts.SyntaxKind.LastTemplateToken,
     ts.SyntaxKind.TemplateMiddle
 ];
-let repos = "data/Repos"
+let repos = "data/Repos";
 let cleaned = "data/Repos-cleaned";
 
 for (let org of fs.readdirSync(repos)) {
     for (let project of fs.readdirSync(repos + "/" + org)) {
         // This project stalls forever
-        if (org == "SAP") continue
+        if (org == "SAP") continue;
         let dir = repos + "/" + org + "/" + project;
         traverse(dir);
     }
@@ -124,7 +124,7 @@ function extractTokens(tree, checker, memS, memT, memP) {
                     try {
                         let symbol = checker.getSymbolAtLocation(child);
                         if (!symbol) {
-                            target = "$any$"
+                            target = "$any$";
                             break;
                         }
                         let type = checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol, child));
@@ -187,7 +187,7 @@ function extractTokens(tree, checker, memS, memT, memP) {
                                 break;
                             }
                         }
-                        memT[index] = "$" + source + "$"
+                        memT[index] = "$" + source + "$";
                         memP[index] = "$" + source + "$"
                     } else {
                         memT[memT.length - 1] = "$" + source + "$";
@@ -231,4 +231,3 @@ function walkSync(dir, filelist) {
     });
     return filelist;
 }
-;

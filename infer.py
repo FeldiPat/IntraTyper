@@ -1,16 +1,11 @@
 from __future__ import print_function  # Use a function definition from future version (say 3.x from 2.7 interpreter)
-import requests
+
 import os
-import sys
-
-import math
-import numpy as np
-import scipy.sparse
-import cntk as C
-
 import re
-import string
 import time
+
+import cntk as C
+import numpy as np
 
 # C.device.try_set_default_device(C.device.cpu())
 
@@ -40,11 +35,16 @@ target_dict = {target_wl[i]: i for i in range(len(target_wl))}
 # number of words in vocab, slot labels, and intent labels
 vocab_size = len(source_dict)
 num_labels = len(target_dict)
-epoch_size = 17.955 * 1000 * 1000
-minibatch_size = 5000
-emb_dim = 300
-hidden_dim = 650
+epoch_size = 340771
+minibatch_size = 3500
+emb_dim = 150
+hidden_dim = 300
 num_epochs = 10
+training_log_file = "training_logs/GRU-3500-300-650-google"  # layer- minibatch_size - emb_dim - hidden_dim - project
+
+# Create Training log directory
+if not os.path.isdir("training_logs"):
+    os.mkdir("training_logs")
 
 # Create the containers for input feature (x) and the label (y)
 x = C.sequence.input_variable(vocab_size, name="x")
@@ -173,7 +173,7 @@ def evaluate():
 def train():
     train_reader = create_reader(files['train']['file'], is_training=True)
     step = 0
-    pp = C.logging.ProgressPrinter(freq=10, tag='Training')
+    pp = C.logging.ProgressPrinter(freq=10, tag='Training', log_to_file=training_log_file)
     for epoch in range(num_epochs):
         epoch_end = (epoch + 1) * epoch_size
         while step < epoch_end:
@@ -188,12 +188,18 @@ def train():
             pp.update_with_trainer(trainer, with_metric=True)
             step += data[y].num_samples
         pp.epoch_summary(with_metric=True)
-        trainer.save_checkpoint("models/model-" + str(epoch + 1) + ".cntk")
+        trainer.save_checkpoint("models/GRU-3500-300-650-google" + str(epoch + 1) + ".cntk")
         validate()
+        print("Epoch: " + str(epoch + 1))
         evaluate()
 
 
 model = create_model()
 enc, dec = model(x, t)
 trainer = create_trainer()
+start_time = time.time()
 train()
+time = time.time() - start_time
+print("--- %s seconds ---" % time)
+with open(training_log_file, "a+") as log:
+    log.write("Total time: " + str(time) + " seconds")
