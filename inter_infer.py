@@ -35,13 +35,12 @@ target_dict = {target_wl[i]: i for i in range(len(target_wl))}
 # number of words in vocab, slot labels, and intent labels
 vocab_size = len(source_dict)
 num_labels = len(target_dict)
-epoch_size = 27305995
+epoch_size = 16209589
 minibatch_size = 3500
 emb_dim = 300
 hidden_dim = 650
 num_epochs = 10
-# setting-layer-minibatch_size-emb_dim-hidden_dim
-training_log_file = "training_logs/inter-GRU-3500-300-650"
+training_log_file = "training_logs/inter-project"
 
 # Create Training log directory
 if not os.path.isdir("training_logs"):
@@ -189,7 +188,7 @@ def train():
             pp.update_with_trainer(trainer, with_metric=True)
             step += data[y].num_samples
         pp.epoch_summary(with_metric=True)
-        trainer.save_checkpoint("models/inter-GRU-3500-300-650" + str(epoch + 1) + ".cntk")
+        trainer.save_checkpoint("models/inter-project-model-" + str(epoch + 1) + ".cntk")
         validate()
         print("Epoch: " + str(epoch + 1))
         evaluate()

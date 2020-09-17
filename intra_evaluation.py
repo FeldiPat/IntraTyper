@@ -7,6 +7,9 @@ import cntk as C
 import numpy as np
 import scipy.sparse
 
+# select project family
+family = "tinymce"
+
 regex = re.compile(r"^[^\d\W]\w*$", re.UNICODE)
 keywords = ["async", "await", "break", "continue", "class", "extends", "constructor", "super", "extends", "const",
             "let", "var", "debugger", "delete", "do", "while", "export", "import", "for", "each", "in", "of",
@@ -17,9 +20,8 @@ keywords = ["async", "await", "break", "continue", "class", "extends", "construc
             "namespace", "require", "from", "of", "package"]
 exclude = ["O", "$any$", "$any[]$", "$any[][]$"]
 
-source_file = "data/intra_source_wl"
-target_file = "data/intra_target_wl"
-model_file = "models/GRU-3500-300-650-google1.cntk"
+source_file = "data/intra_source_wl-" + family
+target_file = "data/intra_target_wl-" + family
 gold_root = "data/outputs-gold/"
 checkJS_root = "data/outputs-checkjs/"
 
@@ -35,11 +37,16 @@ target_dict = {target_wl[i]: i for i in range(len(target_wl))}
 # number of words in vocab, slot labels, and intent labels
 vocab_size = len(source_dict)
 num_labels = len(target_dict)
-epoch_size = 340771
-minibatch_size = 3500
-emb_dim = 300
-hidden_dim = 650
+epoch_size = 422162
+minibatch_size = 10000
+emb_dim = 200
+hidden_dim = 300
 num_epochs = 10
+
+output_file = "results/intra-" + str(minibatch_size) + "-" + str(emb_dim) + "-" + str(
+    hidden_dim) + "-" + family + ".txt"
+model_file = "models/intra-" + str(minibatch_size) + "-" + str(emb_dim) + "-" + str(
+    hidden_dim) + "-" + family + "8.cntk"
 
 # Create the containers for input feature (x) and the label (y)
 x = C.sequence.input_variable(vocab_size, name="x")
@@ -161,25 +168,21 @@ num_steps = 0
 if not os.path.exists("results"):
     os.mkdir("results")
 
-# get suffix of biggest file
-with open("data/biggest10.txt", "r") as f:
-    biggest = f.readlines()[-1].split("__")[0]
-
 test_projects = []
 for project in os.listdir("data/outputs-all"):
-    if not project.lower().startswith(biggest):
+    if not project.lower().startswith(family):
         continue
     test_projects.append(project)
 
 test_lines = []
-with open("data/intra_test_code.txt", 'r') as tlines:
+with open("data/intra_test_code-" + family + ".txt", 'r') as tlines:
     for line in tlines:
         line = line.replace("<s>", "")
         line = line.replace("</s>", "")
         line = line.rstrip().lstrip()
         test_lines.append(line)
 
-with open("results/IT-GRU-3500-300-650-google.txt", "w") as f_out:
+with open(output_file, "w") as f_out:
     for project in test_projects:
         print(project)
         trainer = create_trainer()

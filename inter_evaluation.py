@@ -19,7 +19,7 @@ exclude = ["O", "$any$", "$any[]$", "$any[][]$"]
 
 source_file = "data/inter_source_wl"
 target_file = "data/inter_target_wl"
-model_file = "models/GRU-1.cntk"
+model_file = "models/inter-project-model-5.cntk"
 gold_root = "data/outputs-gold/"
 checkJS_root = "data/outputs-checkjs/"
 
@@ -35,7 +35,7 @@ target_dict = {target_wl[i]: i for i in range(len(target_wl))}
 # number of words in vocab, slot labels, and intent labels
 vocab_size = len(source_dict)
 num_labels = len(target_dict)
-epoch_size = 17.955 * 1000 * 1000
+epoch_size = 16209589
 minibatch_size = 3500
 emb_dim = 300
 hidden_dim = 650
@@ -164,7 +164,7 @@ with open('data/inter_test_projects.txt', 'r') as f:
 if not os.path.exists("results"):
     os.mkdir("results")
 
-with open("results/DT-GRU-3500-300-650.txt", "w") as f_out:
+with open("results/inter-project.txt", "w") as f_out:
     for project in test_projects:
         print(project)
         trainer = create_trainer()
@@ -232,7 +232,7 @@ with open("results/DT-GRU-3500-300-650.txt", "w") as f_out:
                             if target_wl[int(pr)] == types[i]:
                                 dl_rank = ix + 1
                                 break
-                        f_out.write("%s\t%s\t%s\t%.4f\t%d\n" % (types[i], cj_type, dl_type, conf, dl_rank))
+                        f_out.write("%s\t%s\t%.4f\t%d\n" % (types[i], dl_type, conf, dl_rank))
                     f_out.flush()
         except Exception as e:
             continue

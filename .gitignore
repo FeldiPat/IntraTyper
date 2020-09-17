@@ -1,10 +1,11 @@
+.idea/
+.DS_Store
 data/
 !data/cloner.sh
 !data/repo-SHAs.txt
-.idea/
 node_modules/
-.DS_Store
 data/.DS_Store
 package-lock.json
 training_logs/
 models/
+DeepTyper/

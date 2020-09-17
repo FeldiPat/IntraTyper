@@ -5,8 +5,8 @@ random.seed(42)
 
 data_dir = "data/"
 in_dir = data_dir + "outputs-all/"
-min_source_vocab = 3
-min_target_vocab = 3
+min_source_vocab = 10
+min_target_vocab = 10
 minibatchMaxSize = 3500
 # For debugging: set to the fraction of projects to include for shorter training (1 means keep all)
 fraction = 1

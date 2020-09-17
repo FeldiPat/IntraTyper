@@ -1,17 +1,18 @@
 import os
 import random
 
-# random.seed(444)
+random.seed(42)
 
 data_dir = "data/"
 in_dir = data_dir + "outputs-all/"
 min_source_vocab = 3  # cut off source vocabulary at 10 token occurrences
 min_target_vocab = 3  # cut off target vocabulary at 10 token occurrences
-minibatchMaxSize = 3500  # cut off files with less than x characters
+minibatchMaxSize = 10000  # cut off files with less than x characters
+family = "tinymce"  # select project family for intra-setting
 include_JS = False
 
 file_count = 0
-big10 = []
+project_sizes = []
 for project in os.listdir(in_dir):
     if "DefinitelyTyped" in project:
         continue
@@ -21,7 +22,8 @@ for project in os.listdir(in_dir):
 
     source_tokens = []
     target_tokens = []
-    # count source tokens of each project
+
+    # count source tokens of each project with same suffix
     with open(in_dir + "/" + project, "r", encoding="utf-8") as f:
         content = [line.strip() for line in f]
         for ix, line in enumerate(content):  # iterate over each line in the current sourcefile
@@ -38,17 +40,25 @@ for project in os.listdir(in_dir):
     if len(source_tokens) != len(target_tokens):
         continue
 
-    # find biggest 10 projects according to source tokens
-    proj_tuple = (project, len(source_tokens))
+    suffix = project.split("__")[0].lower()
+    proj_tuple = (suffix, len(source_tokens))
+    for tuple in project_sizes:
+        if tuple[0] == suffix:
+            size = len(source_tokens) + tuple[1]
+            proj_tuple = (suffix, size)
+            project_sizes.pop()
+    project_sizes.append(proj_tuple)
+
+big10 = []
+for tuple in project_sizes:
     if len(big10) < 10:
-        big10.append(proj_tuple)
+        big10.append(tuple)
     else:
-        big10 = sorted(big10, key=lambda proj: proj[1])
-        if big10[0][1] < proj_tuple[1]:
-            big10[0] = proj_tuple
+        big10 = sorted(big10, key=lambda tuple: tuple[1])
+        if big10[0][1] < tuple[1]:
+            big10[0] = tuple
 
 # Write biggest 10 files in data/biggest10.txt
-
 with open(data_dir + "biggest10.txt", "w+") as f:
     for project in big10:
         f.write(project[0])
@@ -70,22 +80,19 @@ valid_targets = []
 test_sources = []
 test_targets = []
 
-# get suffix of biggest file
-with open(data_dir + "biggest10.txt", "r") as f:
-    biggest = f.readlines()[-1].split("__")[0]
-
-# collect all source code lines of the biggest project family (here: google_xyz)
+# collect all source code lines of the selected project family
 content = []
 for project in os.listdir(in_dir):
     if "DefinitelyTyped" in project:
         continue
     if os.stat(in_dir + "/" + project).st_size == 0:
         continue
-    if not project.lower().startswith(biggest):
+    if not project.lower().startswith(family):
         continue
     with open(in_dir + "/" + project, "r", encoding="utf-8") as f:
         content = content + [line.strip() for line in f]  # each line corresponds to one sourcefile
 
+# split dataset into training, validation and test set
 for ix, line in enumerate(content):  # iterate over each sourcode-line in the project
     if len(line) == 0:
         continue
@@ -110,12 +117,13 @@ for ix, line in enumerate(content):  # iterate over each sourcode-line in the pr
         valid_sources.append(source_tokens)
         valid_targets.append(target_tokens)
     elif ix in test_indices:
-        with open("data/intra_test_code.txt", 'a+') as t_code:
+        with open("data/intra_test_code-" + family + ".txt", 'a+') as t_code:
             t_code.write(" ".join(source_tokens))
             t_code.write("\n")
         test_sources.append(source_tokens)
         test_targets.append(target_tokens)
 
+print("Statistics for project family: " + family)
 print("Train files: %d" % len(train_sources))
 print("Validation files: %d" % len(valid_sources))
 print("Test files: %d" % len(test_sources))
@@ -159,12 +167,12 @@ for ix, (_, count) in enumerate(target_words):
 target_words = target_words[:target_cutoff]
 target_word_vocab = set([word for word, _ in target_words])
 
-with open(data_dir + "intra_source_wl", "w", encoding="utf-8") as out:
+with open(data_dir + "intra_source_wl-" + family, "w", encoding="utf-8") as out:
     for name, count in source_words:
         out.write(name)
         out.write("\n")
 
-with open(data_dir + "intra_target_wl", "w", encoding="utf-8") as out:
+with open(data_dir + "intra_target_wl-" + family, "w", encoding="utf-8") as out:
     for name, count in target_words:
         out.write(name)
         out.write("\n")
@@ -195,9 +203,9 @@ def write(wfile, sources, targets):
     return token_count
 
 
-train_file = data_dir + "intra_train.txt"
-valid_file = data_dir + "intra_valid.txt"
-test_file = data_dir + "intra_test.txt"
+train_file = data_dir + "intra_train-" + family + ".txt"
+valid_file = data_dir + "intra_valid-" + family + ".txt"
+test_file = data_dir + "intra_test-" + family + ".txt"
 train_tokens = write(train_file, train_sources, train_targets)
 valid_tokens = write(valid_file, valid_sources, valid_targets)
 test_tokens = write(test_file, test_sources, test_targets)
