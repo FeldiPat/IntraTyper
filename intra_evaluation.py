@@ -8,7 +8,7 @@ import numpy as np
 import scipy.sparse
 
 # select project family
-family = "tinymce"
+family = "angular"
 
 regex = re.compile(r"^[^\d\W]\w*$", re.UNICODE)
 keywords = ["async", "await", "break", "continue", "class", "extends", "constructor", "super", "extends", "const",
@@ -37,7 +37,7 @@ target_dict = {target_wl[i]: i for i in range(len(target_wl))}
 # number of words in vocab, slot labels, and intent labels
 vocab_size = len(source_dict)
 num_labels = len(target_dict)
-epoch_size = 422162
+epoch_size = 234761
 minibatch_size = 10000
 emb_dim = 200
 hidden_dim = 300
@@ -46,7 +46,7 @@ num_epochs = 10
 output_file = "results/intra-" + str(minibatch_size) + "-" + str(emb_dim) + "-" + str(
     hidden_dim) + "-" + family + ".txt"
 model_file = "models/intra-" + str(minibatch_size) + "-" + str(emb_dim) + "-" + str(
-    hidden_dim) + "-" + family + "8.cntk"
+    hidden_dim) + "-" + family + "-9.cntk"
 
 # Create the containers for input feature (x) and the label (y)
 x = C.sequence.input_variable(vocab_size, name="x")

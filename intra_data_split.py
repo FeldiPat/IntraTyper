@@ -8,7 +8,7 @@ in_dir = data_dir + "outputs-all/"
 min_source_vocab = 3  # cut off source vocabulary at 10 token occurrences
 min_target_vocab = 3  # cut off target vocabulary at 10 token occurrences
 minibatchMaxSize = 10000  # cut off files with less than x characters
-family = "tinymce"  # select project family for intra-setting
+family = "angular"  # select project family for intra-setting
 include_JS = False
 
 file_count = 0

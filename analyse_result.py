@@ -71,10 +71,10 @@ def plotter_comp(f1, f2):
     file_list = [f1, f2]
     results = []
     for file in file_list:
-        if file.startswith("results/inter"):
+        if file.startswith("results/inter") or file.startswith("results/intra-DeepTyper"):
             project = "DeepTyper"
         else:
-            project = "IntraTyper-" + file.split('-')[4].rstrip('.txt')
+            project = "IntraTyper"
         data = open(file)
         top_1 = 0
         top_5 = 0
@@ -114,7 +114,7 @@ def plotter_comp(f1, f2):
     ax.set_xlabel('Model')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
-    ax.set_title("Comparison between IntraTyper and DeepTyper")
+    ax.set_title("Comparison between IntraTyper and DeepTyper on the google test set")
     ax.legend()
 
     def autolabel(rects):
@@ -141,4 +141,4 @@ plotter_IT("results/intra-10000-200-300-google.txt",
            "results/intra-10000-200-300-angular.txt")
 
 plotter_comp("results/intra-10000-200-300-google.txt",
-             "results/inter-project.txt")
+             "results/intra-DeepTyper.txt")

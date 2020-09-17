@@ -8,6 +8,7 @@ import cntk as C
 import numpy as np
 
 # C.device.try_set_default_device(C.device.cpu())
+
 # select project family
 family = "angular"
 
