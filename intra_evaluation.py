@@ -67,7 +67,7 @@ def create_model():
     encoder = BiRecurrence(C.layers.GRU(hidden_dim // 2), C.layers.GRU(hidden_dim // 2))
     recoder = BiRecurrence(C.layers.GRU(hidden_dim // 2), C.layers.GRU(hidden_dim // 2))
     project = C.layers.Dense(num_labels, name='classify')
-    do = C.layers.Dropout(0.5)
+    do = C.layers.Dropout(0.7)
 
     def recode(x, t):
         inp = embed(x)

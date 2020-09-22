@@ -40,7 +40,7 @@ minibatch_size = 3500
 emb_dim = 300
 hidden_dim = 650
 num_epochs = 10
-training_log_file = "training_logs/inter-project"
+training_log_file = "training_logs/inter-project.txt"
 
 # Create Training log directory
 if not os.path.isdir("training_logs"):
