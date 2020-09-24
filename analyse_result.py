@@ -44,7 +44,7 @@ def plotter_IT(f1, f2, f3):
     rects2 = ax.bar(x + width / 2, top_5_acc, color='orange', width=width, label='Top-5')
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('Accuracy in %')
+    ax.set_ylabel('Accuracy')
     ax.set_xlabel('Project family')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
@@ -137,7 +137,7 @@ def plotter_comp(f1, f2):
     rects4 = ax.bar(r4, uc_5_acc, color='moccasin', width=barWidth, edgecolor='white', label='Top 5 uncommon')
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('Accuracy in %')
+    ax.set_ylabel('Accuracy')
     ax.set_xlabel('Model')
     plt.xticks([r + 1.5 * barWidth for r in range(len(labels))], ['IntraTyper', 'DeepTyper'])
     ax.set_xticklabels(labels)
