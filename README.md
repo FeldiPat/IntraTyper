@@ -29,5 +29,8 @@ python txt2ctf.py --map data/source_wl data/target_wl --input data/test.txt --ou
 9. Adjust the epoch size of `intra_infer.py` and `intra_evaluation.py` according to the output of `intra_data_split.py` in the line "Overall tokens: xyz train".
 10. Run `intra_infer.py` to train the neural net over 10 epochs.
 11. Choose the model with the best evaluation error and provide its path to the `model_file` variable in `intra_evaluation.py`.
-12. Run `intra_evaluation.py` to let the model predict the corresponding types in the test data set. The results are written to the `results` directory in a txt file. The txt file contains four columns which are defined in the following way: true type | prediction | confidence of prediction | rank of prediction
+12. Run `intra_evaluation.py` to let the model predict the corresponding types in the test data set. The results are written to the `results` directory in a txt file. The txt file contains four columns which are defined in the following way:
+
+   true type | prediction | confidence of prediction | rank of prediction
+
 13. To create a plot of the achieved prediction-accuracies, run the script `analyze_result.py`.
