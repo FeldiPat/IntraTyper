@@ -31,6 +31,6 @@ python txt2ctf.py --map data/source_wl data/target_wl --input data/test.txt --ou
 11. Choose the model with the best evaluation error and provide its path to the `model_file` variable in `intra_evaluation.py`.
 12. Run `intra_evaluation.py` to let the model predict the corresponding types in the test data set. The results are written to the `results` directory in a txt file. The txt file contains four columns which are defined in the following way:
 
-   true type | prediction | confidence of prediction | rank of prediction
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  true type | prediction | confidence of prediction | rank of prediction
 
 13. To create a plot of the achieved prediction-accuracies, run the script `analyze_result.py`.
