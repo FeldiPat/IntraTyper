@@ -10,7 +10,6 @@ As the results of the experiments show, due to this specific setting, the tool e
 
 IntraTyper uses the [CNTK library](https://docs.microsoft.com/en-us/cognitive-toolkit/).
 Therefore, an environment which supports CNTK is necessary.
-Unfortunately, CNTK runs natively only on Windows.
 
 1. Execute the bash script `data/cloner.sh`. This will clone all the repositories mentioned in the `data/repo-SHAs.txt` file and reset them to the SHA commits as of February 28. 2018.
 2. Copy the created `data/Repos` directory and name it `data/Repos-cleaned`.
