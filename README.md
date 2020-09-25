@@ -1,6 +1,6 @@
 # IntraTyper
 
-This This repository contains the code and replication scripts for IntraTyper, a modified version of the deep learning type inferring tool [DeepTyper by Hellendoorn et al. (2018)](https://github.com/DeepTyper/DeepTyper).
+This repository contains the code and replication scripts for IntraTyper, a modified version of the deep learning type inferring tool [DeepTyper by Hellendoorn et al. (2018)](https://github.com/DeepTyper/DeepTyper).
 DeepTyper has been trained and evaluated on a set of different projects, a so-called inter-project environment.
 In contrast to that, IntraTyper is trained and evaluated in an intra-project setting.
 This means that IntraTyper is specifically tailored for one project.
